@@ -1,12 +1,12 @@
 steps:
-    # Build the container image
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['build', '-t', 'gcr.io/wordpress-cloud-run/covid', '.']
-    # Push the container image to Container Registry
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['push', 'gcr.io/wordpress-cloud-run/covid']
-    # Deploy container image to Cloud Run
-    - name: 'gcr.io/cloud-builders/gcloud'
-      args: ['run', 'deploy', 'covid', '--image', 'gcr.io/wordpress-cloud-run/covid', '--region', 'europe-north1', '--platform', 'managed', '--allow-unauthenticated']
-    images:
-    - gcr.io/wordpress-cloud-run/covid
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/wordpress-cloud-run/covid', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/wordpress-cloud-run/covid']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run', 'deploy', 'covid', '--image', 'gcr.io/wordpress-cloud-run/covid', '--region', 'europe-north1', '--platform', 'managed', '--allow-unauthenticated']
+images:
+- gcr.io/wordpress-cloud-run/covid
