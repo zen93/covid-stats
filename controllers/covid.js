@@ -5,10 +5,10 @@ function CFR(cases, deaths) {
 }
 
 function estimateInfected(CFR, deaths) {
-    return deaths/CFR.fraction;
-    }
+    return Math.round(deaths/CFR.fraction);
+}
 
-    function averageCFR(allCFR) {
+function averageCFR(allCFR) {
     let sum = 0.0;
     for(const CFR of allCFR) {
         sum += CFR.fraction;
