@@ -5,6 +5,8 @@ ENV PORT=${PORT}
 
 RUN mkdir /home/node/app/ && chown -R node:node /home/node/app
 
+COPY wordpress-cloud-run-owner-key.json /keys/wordpress-cloud-run-owner-key.json
+
 WORKDIR /home/node/app
 
 COPY --chown=node:node package*.json ./
