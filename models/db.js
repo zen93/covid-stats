@@ -20,9 +20,29 @@ function fetchData() {
                 resolve(data);
             })
             .catch( err => {
-                console.log('Error getting documents: ' + err);
+                console.log('Error getting documents: ' + err.message);
                 reject(err);
             });            
+    });
+}
+
+async function fetchTotalData(sourceCountries, estimateCountry) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = [];
+            let snapshot = await db.collection('countriesTotal').doc(estimateCountry).get();
+            if(snapshot.data())
+                data.push(snapshot.data());
+
+            for(source of sourceCountries) {
+                snapshot = await db.collection('countriesTotal').doc(source).get();
+                if(snapshot.data())
+                    data.push(snapshot.data());
+            }
+            resolve(data);
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 
@@ -45,3 +65,4 @@ async function saveData(data) {
 
 module.exports.fetchData = fetchData;
 module.exports.saveData = saveData;
+module.exports.fetchTotalData = fetchTotalData;
