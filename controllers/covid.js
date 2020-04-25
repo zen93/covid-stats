@@ -1,10 +1,12 @@
 const db = require('../models/db');
 
 function CFR(cases, deaths) {
+    if(cases == 0) return { fraction: 0, percent: 0 };
     return { fraction: deaths/cases, percent: (deaths/cases)*100 };
 }
 
 function estimateInfected(CFR, deaths) {
+    if(CFR.fraction === 0) return 0; 
     return Math.round(deaths/CFR.fraction);
 }
 
