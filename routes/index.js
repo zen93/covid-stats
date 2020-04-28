@@ -11,7 +11,7 @@ router.get('/', async function(req, res, next) {
 
     let estimateCountry = '';
     let sourceCountries = [];
-    let stats = [];
+    let stats = {};
     let days = 10;
     
     if(query) {
@@ -23,6 +23,7 @@ router.get('/', async function(req, res, next) {
         for(let i = 0; i < sourceCountries.length; i++) {
           sourceCountries[i] = sourceCountries[i].trim().toLowerCase();
         }
+        sourceCountries = sourceCountries.filter((el) => el != '');
       }
       if(query.days) {
         days = parseInt(query.days);
@@ -31,7 +32,7 @@ router.get('/', async function(req, res, next) {
     stats = await covid.covidStats(sourceCountries, estimateCountry, days);
     res.status(200).send(JSON.stringify({ message: stats }));
   } catch (error) {
-    console.log(error.stack)
+    console.log(error.stack);
     res.send({ message: error.message });
   }
   

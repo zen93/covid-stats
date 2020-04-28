@@ -29,17 +29,28 @@ function fetchData() {
 async function fetchTotalData(sourceCountries, estimateCountry) {
     return new Promise(async (resolve, reject) => {
         try {
-            let data = [];
+            let temp = { data: [], IFR: [] };
+            //let data = [], IFR = [];
+            if(!estimateCountry) reject({ message: "Must provide estimate country!" });
             let snapshot = await db.collection('countriesTotal').doc(estimateCountry).get();
             if(snapshot.data())
-                data.push(snapshot.data());
+                temp.data.push(snapshot.data());
 
-            for(source of sourceCountries) {
-                snapshot = await db.collection('countriesTotal').doc(source).get();
-                if(snapshot.data())
-                    data.push(snapshot.data());
-            }
-            resolve(data);
+            if(sourceCountries.length > 0) {
+                for(source of sourceCountries) {
+                    snapshot = await db.collection('countriesTotal').doc(source).get();
+                    if(snapshot.data())
+                        temp.data.push(snapshot.data());
+                }
+            }            
+
+            snapshot = await db.collection('IFR').get();
+
+            snapshot.forEach(doc => {
+                if(doc.data())
+                    temp.IFR.push(doc.data());    
+            });            
+            resolve(temp);
         } catch (error) {
             reject(error);
         }
