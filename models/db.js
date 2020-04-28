@@ -72,7 +72,8 @@ async function fetchTotalDataNew(sourceCountries, estimateCountry, days) {
                     cData.push(d);
                 }
             });
-            temp.data.push({ slug: estimateCountry, data: cData });
+            if(cData.length > 0)
+                temp.data.push({ slug: estimateCountry, data: cData });
             
             if(sourceCountries.length > 0) {
                 for(source of sourceCountries) {
@@ -86,7 +87,8 @@ async function fetchTotalDataNew(sourceCountries, estimateCountry, days) {
                             cData.push(d);
                         }
                     });
-                    temp.data.push({ slug: source, data: cData });                    
+                    if(cData.length > 0)
+                        temp.data.push({ slug: source, data: cData });                    
                 }
             }
 

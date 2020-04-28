@@ -13,7 +13,9 @@ function estimateInfected(CFR, deaths) {
 function calculateSourceStats(data, sourceCountries, estimateCountry, days) {
     let stats = [];
     for(const country of sourceCountries) {
+        console.log(country);
         let c = data.find( el => el.slug.trim().toLowerCase() === country);
+        console.log(c);
         if(c) {
             let allData = c.data;
             let begin = allData.length - days;
