@@ -30,7 +30,7 @@ async function fetchTotalData(sourceCountries, estimateCountry) {
     return new Promise(async (resolve, reject) => {
         try {
             let temp = { data: [], IFR: [] };
-            //let data = [], IFR = [];
+
             if(!estimateCountry) reject({ message: "Must provide estimate country!" });
             let snapshot = await db.collection('countriesTotal').doc(estimateCountry).get();
             if(snapshot.data())
@@ -43,6 +43,52 @@ async function fetchTotalData(sourceCountries, estimateCountry) {
                         temp.data.push(snapshot.data());
                 }
             }            
+
+            snapshot = await db.collection('IFR').get();
+
+            snapshot.forEach(doc => {
+                if(doc.data())
+                    temp.IFR.push(doc.data());    
+            });            
+            resolve(temp);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+async function fetchTotalDataNew(sourceCountries, estimateCountry, days) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let temp = { data: [], IFR: [] };
+
+            if(!estimateCountry) reject({ message: "Must provide estimate country!" });
+            let cData = [];
+            let snapshot = await db.collection('TestCollection').doc('countries').collection(estimateCountry).orderBy('Date', 'desc').limit(days).get();
+            snapshot.forEach( doc => {
+                if(doc.data()) {
+                    let d = doc.data();
+                    d.Date = d.Date.toDate();
+                    cData.push(d);
+                }
+            });
+            temp.data.push({ slug: estimateCountry, data: cData });
+            
+            if(sourceCountries.length > 0) {
+                for(source of sourceCountries) {
+                    cData = [];
+                    let snapshot = await db.collection('TestCollection').doc('countries').collection(source).orderBy('Date', 'desc').limit(days).get();
+                    snapshot.forEach(doc => {
+                        if(doc.data())
+                        {
+                            let d = doc.data();
+                            d.Date = d.Date.toDate();
+                            cData.push(d);
+                        }
+                    });
+                    temp.data.push({ slug: source, data: cData });                    
+                }
+            }
 
             snapshot = await db.collection('IFR').get();
 
@@ -77,3 +123,4 @@ async function saveData(data) {
 module.exports.fetchData = fetchData;
 module.exports.saveData = saveData;
 module.exports.fetchTotalData = fetchTotalData;
+module.exports.fetchTotalDataNew = fetchTotalDataNew;
