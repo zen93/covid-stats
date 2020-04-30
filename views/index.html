@@ -10,18 +10,42 @@
                         y: {{this.cases}},
                     },
                 {{/each}}   
-            ]
-            var src_dataPoints = [
+            ];
+            var sources_datapoints = [
                 {{#each estimateFromSourcesJson}}
-                    {{#each this.data}}
-                        {
+                    {
+                        sourceCountry: "{{this.sourceCountry}}",
+                        data: [
+                        {{#each this.data}}
+                         {
                             x: new Date("{{this.date}}"),
                             y: {{this.cases}},
                         },
-                    {{/each}} 
+                        {{/each}}
+                        ]
+                    },
                 {{/each}} 
-            ]
-
+            ];
+            let data = [{
+                    type: "line",
+                    showInLegend: true,
+                    name: "True infected cases",
+                    markerType: "square",
+                    xValueFormatString: "DD MMM, YYYY",
+                    color: "#F08080",
+                   
+                    dataPoints:est_dataPoints,
+                },
+                ];
+            for(let src of sources_datapoints) {
+                data.push({
+                    type: "line",
+                    showInLegend: true,
+                    name: "Source, " + src.sourceCountry,
+                    lineDashType: "dash",
+                    dataPoints: src.data,
+                });
+            } 
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
                 theme: "light2",
@@ -51,25 +75,7 @@
                     dockInsidePlotArea: true,
                     itemclick: toogleDataSeries
                 },
-                data: [{
-                    type: "line",
-                    showInLegend: true,
-                    name: "Estimated case",
-                    markerType: "square",
-                    xValueFormatString: "DD MMM, YYYY",
-                    color: "#F08080",
-                   
-                    dataPoints:est_dataPoints,
-                },
-                {
-                    type: "line",
-                    showInLegend: true,
-                    name: "Source Country",
-                    lineDashType: "dash",
-                    dataPoints: [
-                    ],
-                    dataPoints:src_dataPoints,
-                }]
+                data: data,
             });
             chart.render();
 
