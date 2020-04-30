@@ -2,10 +2,18 @@ var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
+const exphbs = require('express-handlebars');
+var indexRouter = require('./routes');
 
 var app = express();
+app.engine('html', exphbs({
+  layoutsDir: 'views',
+  defaultLayout: 'layout',
+  extname: '.html'
+}));
+
+app.set('view engine', 'html'); 
+app.use(express.static('public'));
 
 // view engine setup
 app.use(logger('dev'));

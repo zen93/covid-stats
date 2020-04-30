@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Search </h2>
+
+<form>
+  <label for="fname">The country to be estimated:</label><br>
+  <input type="text" id="estimate" name="estimate" value="sweden"><br>
+  <label for="lname">Source country:</label><br>
+  <input type="text" id="source" name="source" value="germany"><br><br>
+  <button click = "get()">Submit</button>
+
+</form> 
+
+<script>
+    function get()
+    {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function()
+      {
+        if(xhr.readyState == 4)
+        {console.log(xhr.responseText)}  
+      }
+      var url = 'localhost:3000/?estimate='+estimate+'&source='+source;
+      //xhr.open('/get',url);
+      xhr.open('/get','http://localhost:3000/?estimate=sweden&source=germany');
+      xhr.send();
+    }
+</script>
+</body>
+</html>
