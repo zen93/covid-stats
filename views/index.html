@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        window.onload = function () {
+            var est_dataPoints = [
+                {{#each dataJson}}
+                    {
+                        x: new Date("{{this.date}}"),
+                        y: {{this.cases}},
+                    },
+                {{/each}}   
+            ]
+            var src_dataPoints = [
+                {{#each estimateFromSourcesJson}}
+                    {{#each this.data}}
+                        {
+                            x: new Date("{{this.date}}"),
+                            y: {{this.cases}},
+                        },
+                    {{/each}} 
+                {{/each}} 
+            ]
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title: {
+                    text: "Data of COVID-19"
+                },
+                axisX: {
+                    valueFormatString: "DD MMM",
+                    crosshair: {
+                        enabled: true,
+                        snapToDataPoint: true
+                    }
+                },
+                axisY: {
+                    title: "Number of cases",
+                    crosshair: {
+                        enabled: true
+                    }
+                },
+                toolTip: {
+                    shared: true
+                },
+                legend: {
+                    cursor: "pointer",
+                    verticalAlign: "bottom",
+                    horizontalAlign: "left",
+                    dockInsidePlotArea: true,
+                    itemclick: toogleDataSeries
+                },
+                data: [{
+                    type: "line",
+                    showInLegend: true,
+                    name: "Estimated case",
+                    markerType: "square",
+                    xValueFormatString: "DD MMM, YYYY",
+                    color: "#F08080",
+                   
+                    dataPoints:est_dataPoints,
+                },
+                {
+                    type: "line",
+                    showInLegend: true,
+                    name: "Source Country",
+                    lineDashType: "dash",
+                    dataPoints: [
+                    ],
+                    dataPoints:src_dataPoints,
+                }]
+            });
+            chart.render();
+
+            function toogleDataSeries(e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+                chart.render();
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+
+    <h1 style="color: #64B587">Statistic of Covid-19</h1>
+    <h2> The Percentage of Infection Fatality Rate: {{IFR}} </h2>
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <hr>
+    <h2>Estimate Country:Sweden</h2>
+    {{#each dataJson}}
+    <hr>
+    <ul>
+        <li>Date:{{this.date}}</li>
+        <li>Cases:{{this.cases}}</li>
+    </ul>
+    {{/each}}
+    {{#each estimateFromSourcesJson}}
+    <h2>Source Country:{{this.sourceCountry}}</h2>
+    {{#each this.data}}
+    <hr>
+    <ul>
+        <li>Cases:{{this.cases}}</li>
+        <li>Date:{{this.date}}</li>
+    </ul>
+    {{/each}}
+    {{/each}}
+   
+</body>
+
+</html>
