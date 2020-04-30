@@ -5,7 +5,7 @@
 - To try new countries use the endpoint: [https://api.covid19api.com/countries](https://api.covid19api.com/countries) The Slug property is to be used with our service.
 - This service also serves the frontend.
 - We use Docker to containerize the application. Please see the Dockerfile.
-- We use cloud build to automatically deploy this code from the master branch to cloud run.
+- We use cloud build to automatically deploy this code from the master branch to cloud run. See cloudbuild.yaml
 ![CloudBuild](https://i.ibb.co/sQmmzMZ/covid-cicd.png)
 
 ## Instructions to run
