@@ -3,14 +3,18 @@
 <head>
     <script>
         window.onload = function () {
-            var est_dataPoints = [
-                {{#each dataJson}}
+            var est_dataPoints = 
+                {
+                    estimateCountry: "{{estimateCountry}}",
+                    data: [
+                    {{#each dataJson}}
                     {
                         x: new Date("{{this.date}}"),
                         y: {{this.cases}},
                     },
-                {{/each}}   
-            ];
+                    {{/each}}
+                    ]   
+                };
             var sources_datapoints = [
                 {{#each estimateFromSourcesJson}}
                     {
@@ -34,7 +38,7 @@
                     xValueFormatString: "DD MMM, YYYY",
                     color: "#F08080",
                    
-                    dataPoints:est_dataPoints,
+                    dataPoints:est_dataPoints.data,
                 },
                 ];
             for(let src of sources_datapoints) {
@@ -99,7 +103,7 @@
     <div id="chartContainer" style="height: 370px; width: 100%;"></div>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <hr>
-    <h2>Estimate Country:Sweden</h2>
+    <h2>Estimate Country:{{ estimateCountry }}</h2>
     {{#each dataJson}}
     <hr>
     <ul>
